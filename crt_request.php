@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$x509 = new File_X509();
 			$x509->setPrivateKey($privKey);
-			$x509->setDNProp('id-at-organizationName', '$namaperusahaan');
+			$x509->setDNProp('id-at-organizationName', $namaperusahaan);
 
 			$csr = $x509->signCSR();
 
