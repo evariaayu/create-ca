@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			 
 			$namaperusahaan = $_POST['namaperusahaan'];
-			echo $namaperusahaan;
+			//echo $namaperusahaan;
 			$privKey = new Crypt_RSA();
 			extract($privKey->createKey());
 			$privKey->loadKey($privatekey);
@@ -29,9 +29,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$csr = $x509->signCSR();
 
-			echo $x509->saveCSR($csr);
+			//secho $x509->saveCSR($csr);
+			$filecsr = $x509->saveCSR($csr);
+			$myfile = fopen($namaperusahaan.'.txt',"w") or die("Unable to open file!");
+			fwrite($myfile, $filecsr);
+			fclose($myfile);
 
 
+			$file = $namaperusahaan.'.txt';
+
+			if (file_exists($file)) {
+			    header('Content-Description: File Transfer');
+			    header('Content-Type: application/octet-stream');
+			    header('Content-Disposition: attachment; filename='.basename($file));
+			    header('Expires: 0');
+			    header('Cache-Control: must-revalidate');
+			    header('Pragma: public');
+			    header('Content-Length: ' . filesize($file));
+			    readfile($file);
+			    exit;
+			}
 		}
 		else
 		{
