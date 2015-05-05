@@ -20,6 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$organizationName = $_POST['organizationName'];
 			$commonName = $_POST['commonName'];
 			$organizationalUnitName = $_POST['organizationalUnitName'];
+			$countryName = $_POST['countryName'];
+			$stateOrProvinceName = $_POST['stateOrProvinceName'];
+			$localityName = $_POST['localityName'];
+			$emailAddress = $_POST['emailAddress'];
+			
 			//echo $namaperusahaan;
 			$privKey = new Crypt_RSA();
 			extract($privKey->createKey());
@@ -30,18 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$x509->setDNProp('id-at-organizationName', $organizationName);
 			$x509->setDNProp('id-at-commonName', $commonName);
 			$x509->setDNProp('id-at-organizationalUnitName', $organizationalUnitName);
-			// $subject->setDN( 
-			// 			    array( 
-			// 			        'rdnSequence' => array( 
-			// 			            array( 
-			// 			                array( 
-			// 			                    'type' => 'id-at-organizationName', 
-			// 			                    'value'=> 'phpseclib demo cert' 
-			// 			                ) 
-			// 			            ) 
-			// 			        ) 
-			// 			    ) 
-			// 			); 
+			$x509->setDNProp('id-at-countryName', $countryName);
+			$x509->setDNProp('id-at-stateOrProvinceName', $stateOrProvinceName);
+			$x509->setDNProp('id-at-localityName', $localityName);
+			$x509->setDNProp('id-emailAddress', $emailAddress);
+
 
 			$csr = $x509->signCSR();
 
@@ -118,17 +116,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	  </div>
 	  <div class="panel-body">
 	    <form action="" method="post">
-	  		<div class="form-group">
-	   			<label for="organizationName">Organization Name</label>
-	    		<input type="text" class="form-control" name="organizationName">
-	  		</div>
-	  		<div class="form-group">
+	    	<div class="form-group">
 	   			<label for="commonName">Common Name</label>
 	    		<input type="text" class="form-control" name="commonName">
 	  		</div>
 	  		<div class="form-group">
+	   			<label for="organizationName">Organization Name</label>
+	    		<input type="text" class="form-control" name="organizationName">
+	  		</div>
+	  		
+	  		<div class="form-group">
 	   			<label for="organizationalUnitName">Organizational Unit Name</label>
 	    		<input type="text" class="form-control" name="organizationalUnitName">
+	  		</div>
+
+	  		<div class="form-group">
+	   			<label for="localityName">Locality Name</label>
+	    		<input type="text" class="form-control" name="localityName">
+	  		</div>
+
+			<div class="form-group">
+	   			<label for="stateOrProvinceName">State Or Province Name</label>
+	    		<input type="text" class="form-control" name="stateOrProvinceName">
+	  		</div>
+
+	  		<div class="form-group">
+	   			<label for="countryName">Country Name</label>
+	    		<input type="text" class="form-control" name="countryName">
+	  		</div>
+
+	  		<div class="form-group">
+	   			<label for="emailAddress">Email Address</label>
+	    		<input type="text" class="form-control" name="emailAddress">
 	  		</div>
 	    	<input type="submit" name="formSubmit" value="Submit" />
 		</form>
