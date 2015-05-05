@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include('File/X509.php');
 		include('Crypt/RSA.php');
 		if(isset($_POST['organizationName'])){
-			
 			 
 			$organizationName = $_POST['organizationName'];
 			$commonName = $_POST['commonName'];
