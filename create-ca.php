@@ -21,8 +21,12 @@ echo "\r\n\r\n";
 // create a self-signed cert that'll serve as the CA
 $subject = new File_X509();
 $subject->setDNProp('id-at-organizationName', 'teratai putih');
-$subject->setDNProp('id-at-commonName', 'teratai putih');
-$subject->setDNProp('id-at-organizationalUnitName', 'teratai putih');
+$subject->setDNProp('id-at-commonName', 'www.teratai-putih.com');
+$subject->setDNProp('id-at-organizationalUnitName', 'teratai putih signer');
+$subject->setDNProp('id-at-stateOrProvinceName', 'East Java');
+$subject->setDNProp('id-at-localityName', 'Surabaya');
+$subject->setDNProp('id-at-emailAddress', 'mail@teratai-putih.com');
+$subject->setDNProp('id-at-countryName', 'ID');
 $subject->setPublicKey($pubKey);
 
 $issuer = new File_X509();
