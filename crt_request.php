@@ -119,16 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Request CA <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Signin CA <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-            </ul>
-          </li>
+            <li><a href="crt_request.php" role="button" aria-expanded="false">Request CA</a></li>
+            <li><a href="csr_sign.php" role="button" aria-expanded="false">Signin CA</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -143,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
   </nav>
 
-  <div class="container-fluid">
-  </div>
+<!--   <div class="container-fluid">
+  </div> -->
 <br>
 <div class="col-md-6 col-md-offset-3">
 	<div class="panel panel-default">
@@ -156,36 +148,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	    	<div class="form-group">
 	   			<label for="commonName">Common Name</label>
 	    		<input type="text" class="form-control" name="commonName">
+	    		<p class="help-block">Enter the fully qualified domain name (i.e. www.example.com). You may also enter the IP address (i.e. 192.168.1.200) or the internal server short name (i.e. appserver1).</p>
 	  		</div>
 	  		<div class="form-group">
 	   			<label for="organizationName">Organization Name</label>
 	    		<input type="text" class="form-control" name="organizationName">
+	    		<p class="help-block">Enter your company’s legally registered name (i.e. YourCompany, Inc.).</p>
+	    		
 	  		</div>
 	  		
 	  		<div class="form-group">
 	   			<label for="organizationalUnitName">Organizational Unit Name</label>
 	    		<input type="text" class="form-control" name="organizationalUnitName">
+	    		<p class="help-block">(Optional) Enter the department within your organization that you want to appear on the SSL Certificate.</p>
 	  		</div>
 
 	  		<div class="form-group">
 	   			<label for="localityName">Locality Name</label>
 	    		<input type="text" class="form-control" name="localityName">
+	    		<p class="help-block">Enter the city where your company is legally located.</p>
+	    		
 	  		</div>
 
 			<div class="form-group">
 	   			<label for="stateOrProvinceName">State Or Province Name</label>
 	    		<input type="text" class="form-control" name="stateOrProvinceName">
+	    		<p class="help-block">Enter the state or province where your company is legally located.</p>
 	  		</div>
 
 	  		<div class="form-group">
 	   			<label for="countryName">Country Name</label>
 	    		<input type="text" class="form-control" name="countryName">
+	    		<p class="help-block">Enter the country where your company is legally located.</p>
 	  		</div>
 
 	  		<div class="form-group">
 	   			<label for="emailAddress">Email Address</label>
 	    		<input type="text" class="form-control" name="emailAddress">
 	  		</div>
+
 	    	<input type="submit" name="formSubmit" value="Submit" />
 		</form>
 	  </div>
