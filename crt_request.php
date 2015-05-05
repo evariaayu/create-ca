@@ -44,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			//secho $x509->saveCSR($csr);
 			$filecsr = $x509->saveCSR($csr);
-			$myfile = fopen($organizationName.'.txt',"w") or die("Unable to open file!");
+			$myfile = fopen("csr.txt","w") or die("Unable to open file!");
 			fwrite($myfile, $filecsr);
 			fclose($myfile);
-			$file = $organizationName.'.txt';
+			$file = "csr.txt";
 
 			if (file_exists($file)) {
 			    header('Content-Description: File Transfer');
@@ -119,8 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li><a href="crt_request.php" role="button" aria-expanded="false">Request CA</a></li>
-            <li><a href="csr_sign.php" role="button" aria-expanded="false">Signin CA</a></li>
+            <li><a href="crt_request.php" role="button" aria-expanded="false">Request CSR</a></li>
+            <li><a href="csr_sign.php" role="button" aria-expanded="false">Signin CSR</a></li>
+            <li><a href="#" role="button" aria-expanded="false">Request CA</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
@@ -184,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	  		<div class="form-group">
 	   			<label for="emailAddress">Email Address</label>
-	    		<input type="text" class="form-control" name="emailAddress">
+	    		<input type="email" class="form-control" name="emailAddress">
 	  		</div>
 
 	    	<input type="submit" name="formSubmit" value="Submit" />
