@@ -14,10 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// }
 		include('File/X509.php');
 		include('Crypt/RSA.php');
-		if(isset($_POST['namaperusahaan'])){
+		if(isset($_POST['organizationName'])){
 			
 			 
-			$namaperusahaan = $_POST['namaperusahaan'];
+			$organizationName = $_POST['organizationName'];
+			$commonName = $_POST['commonName'];
+			$organizationalUnitName = $_POST['organizationalUnitName'];
 			//echo $namaperusahaan;
 			$privKey = new Crypt_RSA();
 			extract($privKey->createKey());
@@ -25,18 +27,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 			$x509 = new File_X509();
 			$x509->setPrivateKey($privKey);
-			$x509->setDNProp('id-at-organizationName', $namaperusahaan);
+			$x509->setDNProp('id-at-organizationName', $organizationName);
+			$x509->setDNProp('id-at-commonName', $commonName);
+			$x509->setDNProp('id-at-organizationalUnitName', $organizationalUnitName);
+			// $subject->setDN( 
+			// 			    array( 
+			// 			        'rdnSequence' => array( 
+			// 			            array( 
+			// 			                array( 
+			// 			                    'type' => 'id-at-organizationName', 
+			// 			                    'value'=> 'phpseclib demo cert' 
+			// 			                ) 
+			// 			            ) 
+			// 			        ) 
+			// 			    ) 
+			// 			); 
 
 			$csr = $x509->signCSR();
 
 			//secho $x509->saveCSR($csr);
 			$filecsr = $x509->saveCSR($csr);
-			$myfile = fopen($namaperusahaan.'.txt',"w") or die("Unable to open file!");
+			$myfile = fopen($organizationName.'.txt',"w") or die("Unable to open file!");
 			fwrite($myfile, $filecsr);
 			fclose($myfile);
 
 
-			$file = $namaperusahaan.'.txt';
+			$file = $organizationName.'.txt';
 
 			if (file_exists($file)) {
 			    header('Content-Description: File Transfer');
@@ -81,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>CSR Request</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -96,20 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <body>
 <br>
 <div class="col-md-6 col-md-offset-3">
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Request CA</h3>
-  </div>
-  <div class="panel-body">
-    <form action="" method="post">
-  <div class="form-group">
-    <label for="namaperusahaan">Nama Perusahaan</label>
-    <input type="text" class="form-control" placeholder="Masukkan nama perusahaan" name="namaperusahaan">
-  </div>
-    <input type="submit" name="formSubmit" value="Submit" />
-</form>
-  </div>
-</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Request CA</h3>
+	  </div>
+	  <div class="panel-body">
+	    <form action="" method="post">
+	  		<div class="form-group">
+	   			<label for="organizationName">Organization Name</label>
+	    		<input type="text" class="form-control" name="organizationName">
+	  		</div>
+	  		<div class="form-group">
+	   			<label for="commonName">Common Name</label>
+	    		<input type="text" class="form-control" name="commonName">
+	  		</div>
+	  		<div class="form-group">
+	   			<label for="organizationalUnitName">Organizational Unit Name</label>
+	    		<input type="text" class="form-control" name="organizationalUnitName">
+	  		</div>
+	    	<input type="submit" name="formSubmit" value="Submit" />
+		</form>
+	  </div>
+	</div>
 </div>
 
 	
