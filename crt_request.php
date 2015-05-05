@@ -48,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$myfile = fopen($organizationName.'.txt',"w") or die("Unable to open file!");
 			fwrite($myfile, $filecsr);
 			fclose($myfile);
-
-
 			$file = $organizationName.'.txt';
 
 			if (file_exists($file)) {
@@ -154,8 +152,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	  </div>
 	</div>
 </div>
-
-	
     <script src="js/jquery-1.11.2.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
