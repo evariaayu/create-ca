@@ -11,11 +11,19 @@ $pubKey = new Crypt_RSA();
 $pubKey->loadKey($publickey);
 $pubKey->setPublicKey();
 
-echo "the private key for the CA cert (can be discarded):\r\n\r\n";
-echo $privatekey;
-echo "\r\n\r\n";
-echo $publickey;
-echo "\r\n\r\n";
+// echo "the private key for the CA cert (can be discarded):\r\n\r\n";
+// echo $privatekey;
+
+// $fileRoot = $x509->saveX509($result);
+$myfileprivkey = fopen("privkeyRoot.pem","w") or die("Unable to open file!");
+fwrite($myfileprivkey, $privatekey);
+fclose($myfileprivkey);
+
+// echo $publickey;
+// $fileRoot = $x509->saveX509($result);
+$myfilepubkey = fopen("pubkeyroot.pem","w") or die("Unable to open file!");
+fwrite($myfilepubkey, $publickey);
+fclose($myfilepubkey);
 
 
 // create a self-signed cert that'll serve as the CA
@@ -38,7 +46,10 @@ $x509->makeCA();
 $x509->setStartDate('-1 month');
 $x509->setEndDate('+1 year');
 $result = $x509->sign($issuer, $subject);
-//echo "the CA cert to be imported into the browser is as follows:\r\n\r\n";
-echo $x509->saveX509($result);
-//echo "\r\n\r\n";
+
+// echo $x509->saveX509($result);
+$fileRoot = $x509->saveX509($result);
+$myfileroot = fopen("root.pem","w") or die("Unable to open file!");
+fwrite($myfileroot, $fileRoot);
+fclose($myfileroot);
 ?>

@@ -76,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			mysqli_free_result($result_query);
 
 			mysqli_close($con);
-			echo $fileca;
-			$myfile = fopen("ca".'.txt',"w") or die("Unable to open file!");
+			// echo $fileca;
+			$myfile = fopen("ca".'.crt',"w") or die("Unable to open file!");
 			fwrite($myfile, $fileca);
 			fclose($myfile);
 
@@ -85,17 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$file = "ca".'.txt';
 			
 
-			// if (file_exists($file)) {
-			//     header('Content-Description: File Transfer');
-			//     header('Content-Type: application/octet-stream');
-			//     header('Content-Disposition: attachment; filename='.basename($file));
-			//     header('Expires: 0');
-			//     header('Cache-Control: must-revalidate');
-			//     header('Pragma: public');
-			//     header('Content-Length: ' . filesize($file));
-			//     readfile($file);
-			//     exit;
-			// }
+			if (file_exists($file)) {
+			    header('Content-Description: File Transfer');
+			    header('Content-Type: application/octet-stream');
+			    header('Content-Disposition: attachment; filename='.basename($file));
+			    header('Expires: 0');
+			    header('Cache-Control: must-revalidate');
+			    header('Pragma: public');
+			    header('Content-Length: ' . filesize($file));
+			    readfile($file);
+			    exit;
+			}
 		}
 		else
 		{

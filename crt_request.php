@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		include('Crypt/RSA.php');
 		if(isset($_POST['organizationName'])){
 			 
+
 			$organizationName = $_POST['organizationName'];
 			$commonName = $_POST['commonName'];
 			$organizationalUnitName = $_POST['organizationalUnitName'];
@@ -23,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$stateOrProvinceName = $_POST['stateOrProvinceName'];
 			$localityName = $_POST['localityName'];
 			$emailAddress = $_POST['emailAddress'];
+
 			
 			//echo $namaperusahaan;
 			$privKey = new Crypt_RSA();
@@ -47,19 +49,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$myfile = fopen("csr.txt","w") or die("Unable to open file!");
 			fwrite($myfile, $filecsr);
 			fclose($myfile);
-			$file = "csr.txt";
 
-			if (file_exists($file)) {
-			    header('Content-Description: File Transfer');
-			    header('Content-Type: application/octet-stream');
-			    header('Content-Disposition: attachment; filename='.basename($file));
-			    header('Expires: 0');
-			    header('Cache-Control: must-revalidate');
-			    header('Pragma: public');
-			    header('Content-Length: ' . filesize($file));
-			    readfile($file);
-			    exit;
+			$con = mysqli_connect("localhost","root","","csr");
+
+			// Check connection
+			if (mysqli_connect_errno())
+			{
+				echo "Failed to connect to MySQL: " . mysqli_connect_error();
 			}
+			$sql="INSERT INTO csr_request (organizationName,commonName,organizationalUnitName,countryName,stateOrProvinceName,emailAddress,localityName,username,digitalsign,status)
+			VALUES('$organizationName','$commonName','$organizationalUnitName','$countryName','$stateOrProvinceName','$emailAddress','$localityName','root','$filecsr','0')";
+			$result_query=mysqli_query($con,$sql);
+			echo $sql;
+			//mysqli_free_result($result_query);
+
+			mysqli_close($con);
+			// $file = "csr.txt";
+
+			// if (file_exists($file)) {
+			//     header('Content-Description: File Transfer');
+			//     header('Content-Type: application/octet-stream');
+			//     header('Content-Disposition: attachment; filename='.basename($file));
+			//     header('Expires: 0');
+			//     header('Cache-Control: must-revalidate');
+			//     header('Pragma: public');
+			//     header('Content-Length: ' . filesize($file));
+			//     readfile($file);
+			//     exit;
+			// }
+
+			
 		}
 		else
 		{
