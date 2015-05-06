@@ -1,91 +1,11 @@
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if(isset($_POST['formSubmit']))
-	{
-			include('File/X509.php');
-			include('Crypt/RSA.php');
-
-			// create private key for CA cert
-			$CAPrivKey = new Crypt_RSA();
-			extract($CAPrivKey->createKey());
-			$CAPrivKey->loadKey($privatekey);
-
-			$pubKey = new Crypt_RSA();
-			$pubKey->loadKey($publickey);
-			$pubKey->setPublicKey();
-
-			// echo "the private key for the CA cert (can be discarded):\r\n\r\n";
-			// echo $privatekey;
-
-			// $fileRoot = $x509->saveX509($result);
-			$myfileprivkey = fopen("privkeyRoot.crt","w") or die("Unable to open file!");
-			fwrite($myfileprivkey, $privatekey);
-			fclose($myfileprivkey);
-
-			// echo $publickey;
-			// $fileRoot = $x509->saveX509($result);
-			$myfilepubkey = fopen("pubkeyroot.crt","w") or die("Unable to open file!");
-			fwrite($myfilepubkey, $publickey);
-			fclose($myfilepubkey);
-
-
-			// create a self-signed cert that'll serve as the CA
-			$subject = new File_X509();
-			$subject->setDNProp('id-at-organizationName', $organizationName);
-			$subject->setDNProp('id-at-commonName', $commonName);
-			$subject->setDNProp('id-at-organizationalUnitName', $organizationalUnitName);
-			$subject->setDNProp('id-at-stateOrProvinceName', $stateOrProvinceName);
-			$subject->setDNProp('id-at-localityName', $localityName);
-			$subject->setDNProp('id-at-emailAddress', $emailAddress);
-			$subject->setDNProp('id-at-countryName', $countryName);
-			$subject->setPublicKey($pubKey);
-
-			$issuer = new File_X509();
-			$issuer->setPrivateKey($CAPrivKey);
-			$issuer->setDN($CASubject = $subject->getDN());
-
-			$x509 = new File_X509();
-			$x509->makeCA();
-			$x509->setStartDate('-1 month');
-			$x509->setEndDate('+1 year');
-			$result = $x509->sign($issuer, $subject);
-
-			// echo $x509->saveX509($result);
-			$fileRoot = $x509->saveX509($result);
-			$con = mysqli_connect("localhost","root","","csr");
-
-			// Check connection
-			if (mysqli_connect_errno())
-			{
-				echo "Failed to connect to MySQL: " . mysqli_connect_error();
-			}
-			$sql="UPDATE root set pubKey='$publickey',privKey='$privatekey',signature='$fileRoot' where username='root'";
-			$result_query=mysqli_query($con,$sql);
-			// echo $sql;
-			//mysqli_free_result($result_query);
-
-			mysqli_close($con);
-
-			$myfileroot = fopen("root.crt","w") or die("Unable to open file!");
-			fwrite($myfileroot, $fileRoot);
-			fclose($myfileroot);
-
-	}
-		else
-		{
-			echo "ga masuk";
-		}
-}
-?>
-
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>CSR Request</title>
+    <title>Create CA</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -114,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <ul class="nav navbar-nav">
             <li><a href="crt_request.php" role="button" aria-expanded="false">Request CSR</a></li>
             <li><a href="csr_sign.php" role="button" aria-expanded="false">Signin CSR</a></li>
-            <li><a href="create-ca.php" role="button" aria-expanded="false">Request CA</a></li>
+            <li><a href="#" role="button" aria-expanded="false">Request CA</a></li>
             
         </ul>
 
@@ -186,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	    		<p class="help-block">Enter the country where your company is legally located.</p>
 	  		</div>
 
-	    	<input type="submit" name="formSubmit" value="Submit" />
+	    	<input type="submit" name="formSubmit1" value="Submit" />
 		</form>
 	  </div>
 	</div>
@@ -196,3 +116,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="js/bootstrap.min.js"></script>
   </body>
 </html>
+
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+	if(isset($_POST['formSubmit1']))
+	{
+			include('File/X509.php');
+			include('Crypt/RSA.php');
+
+			// create private key for CA cert
+			$CAPrivKey = new Crypt_RSA();
+			extract($CAPrivKey->createKey());
+			$CAPrivKey->loadKey($privatekey);
+
+			$pubKey = new Crypt_RSA();
+			$pubKey->loadKey($publickey);
+			$pubKey->setPublicKey();
+
+			// echo "the private key for the CA cert (can be discarded):\r\n\r\n";
+			// echo $privatekey;
+
+			// $fileRoot = $x509->saveX509($result);
+			$myfileprivkey = fopen("privkeyRoot.crt","w") or die("Unable to open file!");
+			fwrite($myfileprivkey, $privatekey);
+			fclose($myfileprivkey);
+
+			// echo $publickey;
+			// $fileRoot = $x509->saveX509($result);
+			$myfilepubkey = fopen("pubkeyroot.crt","w") or die("Unable to open file!");
+			fwrite($myfilepubkey, $publickey);
+			fclose($myfilepubkey);
+
+			if(isset($_POST['organizationName']))
+			{
+			 
+
+				$organizationName = $_POST['organizationName'];
+				$commonName = $_POST['commonName'];
+				$organizationalUnitName = $_POST['organizationalUnitName'];
+				$countryName = $_POST['countryName'];
+				$stateOrProvinceName = $_POST['stateOrProvinceName'];
+				$localityName = $_POST['localityName'];
+				$emailAddress = $_POST['emailAddress'];
+
+
+			// create a self-signed cert that'll serve as the CA
+			$subject = new File_X509();
+			$subject->setDNProp('id-at-organizationName', $organizationName);
+			$subject->setDNProp('id-at-commonName', $commonName);
+			$subject->setDNProp('id-at-organizationalUnitName', $organizationalUnitName);
+			$subject->setDNProp('id-at-stateOrProvinceName', $stateOrProvinceName);
+			$subject->setDNProp('id-at-localityName', $localityName);
+			$subject->setDNProp('id-at-emailAddress', $emailAddress);
+			$subject->setDNProp('id-at-countryName', $countryName);
+			$subject->setPublicKey($pubKey);
+			
+			echo $organizationName;
+
+
+			$issuer = new File_X509();
+			$issuer->setPrivateKey($CAPrivKey);
+			$issuer->setDN($CASubject = $subject->getDN());
+
+			$x509 = new File_X509();
+			$x509->makeCA();
+			$x509->setStartDate('-1 month');
+			$x509->setEndDate('+1 year');
+			$result = $x509->sign($issuer, $subject);
+
+			// echo $x509->saveX509($result);
+			$fileRoot = $x509->saveX509($result);
+			$con = mysqli_connect("localhost","root","","csr");
+			
+			// Check connection
+			if (mysqli_connect_errno())
+			{
+				echo "Failed to connect to MySQL: " . mysqli_connect_error();
+			}
+			$sql="UPDATE root set pubKey='$publickey',privKey='$privatekey',signature='$fileRoot' where username='root'";
+			$result_query=mysqli_query($con,$sql);
+			// echo $sql;
+			//mysqli_free_result($result_query);
+
+			mysqli_close($con);
+
+			$myfileroot = fopen("root.crt","w") or die("Unable to open file!");
+			fwrite($myfileroot, $fileRoot);
+			fclose($myfileroot);
+
+			
+		}
+		else
+		{
+			echo "Tidak masuk";
+		}
+	}
+	else
+	{
+			echo "Error Submit";
+	}
+
+}
+
+?>
+
