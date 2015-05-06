@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		include('File/X509.php');
 		include('Crypt/RSA.php');
-		if(isset($_POST['csr'])){
+		if(isset($_POST['serialNumber'])){
 			
 			$con = mysqli_connect("localhost","root","","csr");
 
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$CAPubKey = new Crypt_RSA();
 			$CAPrivKey->loadKey($row["privKey"]);
 			$CAPubKey->loadKey($row["pubKey"]);
-			$csr = $_POST['csr'];
+			
 			//echo $row["pubKey"].$row["privKey"].$row["signature"];
 			//echo $namaperusahaan;
 			// $privKey = new Crypt_RSA();
@@ -53,9 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// $x509->setDNProp('id-at-organizationName', $namaperusahaan);
 
 			// $csr = $x509->signCSR();
+			
+
 			$issuer = new File_X509();
 			$issuer->setPrivateKey($CAPrivKey);
 			$ca=$issuer->loadX509($row["signature"]);
+			$serialNumber = $_POST['serialNumber'];
+			
+			$sql="SELECT digitalsign FROM csr_request where serialNumber='$serialNumber'";
+			$result_query=mysqli_query($con,$sql);
+
+			$row=mysqli_fetch_array($result_query,MYSQLI_ASSOC);
+			$csr = $row['digitalsign'];
 			$subject = new File_X509();
 			$subject->setPublicKey($CAPubKey);
 			$subject->loadCSR($csr);
@@ -63,17 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$x509->setStartDate('-1 month');
 			$x509->setEndDate('+1 year');
 			
-			$sql="SELECT pubKey,privKey,signature FROM root where username='root'";
-			$result_query=mysqli_query($con,$sql);
-			// Associative array
-			$row=mysqli_fetch_array($result_query,MYSQLI_ASSOC);
-			$serial = '12';
-			$x509->setSerialNumber(chr($serial));
+			
+			$x509->setSerialNumber(chr($serialNumber));
 			$result = $x509->sign($issuer, $subject);
 			$fileca = $x509->saveX509($result);
-			
+			$sql="UPDATE csr_request set status='1' where serialNumber='$serialNumber'";
+			$result_query=mysqli_query($con,$sql);
 			// Free result set
-			mysqli_free_result($result_query);
+			// mysqli_free_result($result_query);
 
 			mysqli_close($con);
 			// echo $fileca;
@@ -82,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			fclose($myfile);
 
 
-			$file = "ca".'.txt';
+			$file = "ca".'.crt';
 			
 
 			if (file_exists($file)) {
@@ -151,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form action="" method="post">
   <div class="form-group">
     <label for="namaperusahaan">Sign CSR</label>
-    <select>
+    <select name="serialNumber">
     <?php 
     	$con = mysqli_connect("localhost","root","","csr");
 
@@ -172,8 +178,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
      ?>
      </select>
-    <textarea class="form-control" placeholder="Masukkan CSR perusahaan" name="csr">
-  	</textarea>
+    <!-- <textarea class="form-control" placeholder="Masukkan CSR perusahaan" name="csr">
+  	</textarea> -->
   </div>
     <input type="submit" name="formSubmit" value="Submit" />
 </form>

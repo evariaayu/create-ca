@@ -15,13 +15,13 @@ $pubKey->setPublicKey();
 // echo $privatekey;
 
 // $fileRoot = $x509->saveX509($result);
-$myfileprivkey = fopen("privkeyRoot.pem","w") or die("Unable to open file!");
+$myfileprivkey = fopen("privkeyRoot.crt","w") or die("Unable to open file!");
 fwrite($myfileprivkey, $privatekey);
 fclose($myfileprivkey);
 
 // echo $publickey;
 // $fileRoot = $x509->saveX509($result);
-$myfilepubkey = fopen("pubkeyroot.pem","w") or die("Unable to open file!");
+$myfilepubkey = fopen("pubkeyroot.crt","w") or die("Unable to open file!");
 fwrite($myfilepubkey, $publickey);
 fclose($myfilepubkey);
 
@@ -49,7 +49,21 @@ $result = $x509->sign($issuer, $subject);
 
 // echo $x509->saveX509($result);
 $fileRoot = $x509->saveX509($result);
-$myfileroot = fopen("root.pem","w") or die("Unable to open file!");
+$con = mysqli_connect("localhost","root","","csr");
+
+// Check connection
+if (mysqli_connect_errno())
+{
+	echo "Failed to connect to MySQL: " . mysqli_connect_error();
+}
+$sql="UPDATE root set pubKey='$publickey',privKey='$privatekey',signature='$fileRoot' where username='root'";
+$result_query=mysqli_query($con,$sql);
+// echo $sql;
+//mysqli_free_result($result_query);
+
+mysqli_close($con);
+
+$myfileroot = fopen("root.crt","w") or die("Unable to open file!");
 fwrite($myfileroot, $fileRoot);
 fclose($myfileroot);
 ?>

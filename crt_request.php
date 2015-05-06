@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$sql="INSERT INTO csr_request (organizationName,commonName,organizationalUnitName,countryName,stateOrProvinceName,emailAddress,localityName,username,digitalsign,status)
 			VALUES('$organizationName','$commonName','$organizationalUnitName','$countryName','$stateOrProvinceName','$emailAddress','$localityName','root','$filecsr','0')";
 			$result_query=mysqli_query($con,$sql);
-			echo $sql;
+			// echo $sql;
 			//mysqli_free_result($result_query);
 
 			mysqli_close($con);
