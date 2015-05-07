@@ -1,6 +1,4 @@
 <?php
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if(isset($_POST['formSubmit']))
   {
@@ -21,17 +19,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ca->loadX509($pemca);
     $ca->setPrivateKey($cakey);
 
-    // Build the (empty) certificate revocation list.
-    $crl = new File_X509();
-    $crl->loadCRL($crl->saveCRL($crl->signCRL($ca, $crl)));
+    // // Build the (empty) certificate revocation list.
+    // $crl = new File_X509();
+    // $crl->loadCRL($crl->saveCRL($crl->signCRL($ca, $crl)));
 
+    // Load the CRL.
+	$crl = new File_X509();
+	$crl->loadCA($pemca); // For later signature check.
+	$pemcrl = file_get_contents('mycrl.crl');
+	$crl->loadCRL($pemcrl);
+
+// 	// Validate the CRL.
+// 	if ($crl->validateSignature() !== 1) {
+//     exit("CRL signature is invalid\n");
+// }
     // Revoke a certificate.
     $crl->setRevokedCertificateExtension($serialNumber, 'id-ce-cRLReasons', $revokereason);
 
     // Sign the CRL.
     // $date = date_create();
     
-    $crl->setSerialNumber(1, 1000);
     $crl->setEndDate('+3 months');
     $newcrl = $crl->signCRL($ca, $crl);
 
@@ -117,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <li><a href="crt_request.php" aria-expanded="false">Request CSR</a></li>
             <li><a href="csr_sign.php" aria-expanded="false">Signin CSR</a></li>
             <li><a href="create-ca.php" aria-expanded="false">Request CA</a></li>
-            <li><a href="crl_create.php">Revoke Certificate</a></li> 
+            <li><a href="crl_create.php">Revoke Certificate</a></li>
+            <li><a href="crl_update.php">Update Revoke Certificate</a></li> 
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
