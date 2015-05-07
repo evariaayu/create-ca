@@ -165,17 +165,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	  </div>
 	  <div class="panel-body">
 	    <form action="" method="post">
+
+	    	<div class="form-group">
+	   			<label for="organizationName">Organization Name</label>
+	    		<input type="text" class="form-control" name="organizationName">
+	    		<p class="help-block">Enter your company’s legally registered name (i.e. YourCompany, Inc.).</p>
+	   		</div>
+
 	    	<div class="form-group">
 	   			<label for="commonName">Common Name</label>
 	    		<input type="text" class="form-control" name="commonName">
 	    		<p class="help-block">Enter the fully qualified domain name (i.e. www.example.com). You may also enter the IP address (i.e. 192.168.1.200) or the internal server short name (i.e. appserver1).</p>
 	  		</div>
-	  		<div class="form-group">
-	   			<label for="organizationName">Organization Name</label>
-	    		<input type="text" class="form-control" name="organizationName">
-	    		<p class="help-block">Enter your company’s legally registered name (i.e. YourCompany, Inc.).</p>
-	    		
-	  		</div>
+	  		
 	  		
 	  		<div class="form-group">
 	   			<label for="organizationalUnitName">Organizational Unit Name</label>

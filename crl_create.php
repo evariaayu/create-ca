@@ -29,3 +29,103 @@ $myfileroot = fopen("mycrl.crl","w") or die("Unable to open file!");
 fwrite($myfileroot, $fileRoot);
 fclose($myfileroot);
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>CSR Request</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+  <nav class="navbar navbar-static-top navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle Navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">OPENCA</a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="crt_request.php" role="button" aria-expanded="false">Request CSR</a></li>
+            <li><a href="csr_sign.php" role="button" aria-expanded="false">Signin CSR</a></li>
+            <li><a href="#" role="button" aria-expanded="false">Request CA</a></li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> 
+            <ul class="dropdown-menu" role="menu">
+              <li class="divider"></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!--   <div class="container-fluid">
+  </div> -->
+<br>
+<div class="col-md-6 col-md-offset-3">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Request CA</h3>
+	  </div>
+	  <div class="panel-body">
+	    <form action="" method="post">
+
+	    	<div class="form-group">
+			    <label for="namaperusahaan">Sign CSR</label>
+			    <select name="serialNumber">
+			    <?php 
+			    	$con = mysqli_connect("localhost","root","","csr");
+
+					// Check connection
+					if (mysqli_connect_errno())
+					{
+						echo "Failed to connect to MySQL: " . mysqli_connect_error();
+					}
+					$sql="SELECT serialNumber,organizationName FROM csr_request where status=0";
+					$result_query=mysqli_query($con,$sql);
+
+
+					// Associative array
+					$row=mysqli_fetch_all($result_query,MYSQLI_ASSOC);
+					foreach ($row as $rows) {
+						print_r($rows);
+						echo "<option value=".$rows["serialNumber"].">".$rows["organizationName"]."</option>";
+					}
+			     ?>
+			     </select>
+			    <!-- <textarea class="form-control" placeholder="Masukkan CSR perusahaan" name="csr">
+			  	</textarea> -->
+			 </div>
+			 
+	    	<input type="submit" name="formSubmit" value="Submit" />
+		</form>
+	  </div>
+	</div>
+</div>
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
