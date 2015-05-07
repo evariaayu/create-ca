@@ -57,26 +57,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			{
 				echo "Failed to connect to MySQL: " . mysqli_connect_error();
 			}
-			$sql="INSERT INTO csr_request (organizationName,commonName,organizationalUnitName,countryName,stateOrProvinceName,emailAddress,localityName,username,digitalsign,status)
-			VALUES('$organizationName','$commonName','$organizationalUnitName','$countryName','$stateOrProvinceName','$emailAddress','$localityName','root','$filecsr','0')";
+			$sql="INSERT INTO csr_request (organizationName,commonName,organizationalUnitName,countryName,stateOrProvinceName,emailAddress,localityName,username,digitalsign,status,statusrevoke)
+			VALUES('$organizationName','$commonName','$organizationalUnitName','$countryName','$stateOrProvinceName','$emailAddress','$localityName','root','$filecsr','0','0')";
 			$result_query=mysqli_query($con,$sql);
 			// echo $sql;
 			//mysqli_free_result($result_query);
 
 			mysqli_close($con);
-			// $file = "csr.txt";
+			$file = "csr.txt";
 
-			// if (file_exists($file)) {
-			//     header('Content-Description: File Transfer');
-			//     header('Content-Type: application/octet-stream');
-			//     header('Content-Disposition: attachment; filename='.basename($file));
-			//     header('Expires: 0');
-			//     header('Cache-Control: must-revalidate');
-			//     header('Pragma: public');
-			//     header('Content-Length: ' . filesize($file));
-			//     readfile($file);
-			//     exit;
-			// }
+			if (file_exists($file)) {
+			    header('Content-Description: File Transfer');
+			    header('Content-Type: application/octet-stream');
+			    header('Content-Disposition: attachment; filename='.basename($file));
+			    header('Expires: 0');
+			    header('Cache-Control: must-revalidate');
+			    header('Pragma: public');
+			    header('Content-Length: ' . filesize($file));
+			    readfile($file);
+			    exit;
+			}
 
 			
 		}
@@ -159,10 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!--   <div class="container-fluid">
   </div> -->
 <br>
-<div class="col-md-6 col-md-offset-3">
+<div class="col-lg-6 col-md-offset-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <h3 class="panel-title">Request CA</h3>
+	    <h3 class="panel-title">Request CSR</h3>
 	  </div>
 	  <div class="panel-body">
 	    <form action="" method="post">
