@@ -35,7 +35,8 @@
             <li><a href="crt_request.php" aria-expanded="false">Request CSR</a></li>
             <li><a href="csr_sign.php" aria-expanded="false">Signin CSR</a></li>
             <li><a href="create-ca.php" aria-expanded="false">Request CA</a></li>
-            <li><a href="crl_create.php">Revoke Certificate</a></li> 
+            <li><a href="crl_create.php">Revoke Certificate</a></li>
+            <li><a href="crl_update.php">Update Revoke Certificate</a></li> 
             
         </ul>
 
