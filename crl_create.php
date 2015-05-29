@@ -119,12 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <li><a href="create-ca.php" aria-expanded="false">Request CA</a></li>
             <li><a href="crl_create.php">Revoke Certificate</a></li>
             <li><a href="crl_update.php">Update Revoke Certificate</a></li> 
-            <li><a href="logout.php" aria-expanded="false">Log Out</a></li>
+            <!-- <li><a href="logout.php" aria-expanded="false">Log Out</a></li> -->
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
+        <li><a href="logout.php" aria-expanded="false">Log Out</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> 
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"><?php echo $login_session ?></span> 
             <ul class="dropdown-menu" role="menu">
               <li class="divider"></li>
             </ul>

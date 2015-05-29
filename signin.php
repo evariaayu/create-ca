@@ -80,6 +80,7 @@ include('login.php'); // Memasuk-kan skrip Login
 	  		</div>
 
 	    	<input type="submit" name="masuk" value="Sign In" />
+	    	<a href="daftar.php" aria-expanded="false">Belum Punya Akun?</a>
 		</form>
 	  </div>
 	</div>

@@ -27,7 +27,7 @@ if (isset($_POST['masuk'])) {
 		if (isset($rows)) {
 			if($rows['hak_akses']=="admin"){
 				$_SESSION['login_user']=$username; // Membuat Sesi/session
-				header("location: create-ca.php"); // Mengarahkan ke halaman requestca	
+				header("location: csr_sign.php"); // Mengarahkan ke halaman requestca	
 			}
 			else{
 				$_SESSION['login_user']=$username; // Membuat Sesi/session
