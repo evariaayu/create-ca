@@ -1,6 +1,5 @@
 <?php
-
-
+include('session.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if(isset($_POST['formSubmit']))
@@ -161,11 +160,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-            <li><a href="crt_request.php" aria-expanded="false">Request CSR</a></li>
+            
             <li><a href="csr_sign.php" aria-expanded="false">Signin CSR</a></li>
             <li><a href="create-ca.php" aria-expanded="false">Request CA</a></li>
             <li><a href="crl_create.php">Revoke Certificate</a></li> 
             <li><a href="crl_update.php">Update Revoke Certificate</a></li> 
+            <li><a href="logout.php" aria-expanded="false">Log Out</a></li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">

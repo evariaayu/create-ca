@@ -21,15 +21,23 @@ if (isset($_POST['masuk'])) {
 		// Seleksi Database
 		$db = mysql_select_db("csr", $connection);
 		// SQL query untuk memeriksa apakah karyawan terdapat di database?
-		$query = mysql_query("select * from user where password='$password' AND username='$username'", $connection);
-		$rows = mysql_num_rows($query);
-			if ($rows == 1) {
+		$query = mysql_query("select hak_akses from user where password='$password' AND username='$username'", $connection);
+		$rows = mysql_fetch_assoc($query);
+		print_r($rows['hak_akses']);
+		if (isset($rows)) {
+			if($rows['hak_akses']=="admin"){
 				$_SESSION['login_user']=$username; // Membuat Sesi/session
-				header("location: create-ca.php"); // Mengarahkan ke halaman profil
-				} else {
-				$error = "Username atau Password belum terdaftar";
-				}
-				mysql_close($connection); // Menutup koneksi
+				header("location: create-ca.php"); // Mengarahkan ke halaman requestca	
+			}
+			else{
+				$_SESSION['login_user']=$username; // Membuat Sesi/session
+				header("location: crt_request.php"); // Mengarahkan ke halaman requestca
+			}
+		} 
+		else {
+			$error = "Username atau Password belum terdaftar";
+		}
+		mysql_close($connection); // Menutup koneksi
 	}
 }
 print_r($error);
